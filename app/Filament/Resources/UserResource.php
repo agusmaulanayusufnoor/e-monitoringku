@@ -2,17 +2,21 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
-use Filament\Tables\Columns\TextColumn;
+use App\Models\Kantor;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
@@ -24,11 +28,29 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Setting';
 
+    protected static ?int $navigationSort = 31;
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                Section::make('User')
+                ->icon('heroicon-m-user')
+                ->schema([
+                    TextInput::make('name')->Label('Nama'),
+                    TextInput::make('username')->Label('Username'),
+                    TextInput::make('email')->Label('Email'),
+                    TextInput::make('password')->Label('Password')->password()
+                    ->required(),
+                    // TextInput::make('kantor_id')->Label('Kantor')
+                    Select::make('kantor_id')
+                    ->label('Kantor')
+                    ->options(Kantor::all()->pluck('nama_kantor', 'id'))
+                    ->searchable()
+                ])
+                ->columns(3),
+
+
             ]);
     }
 
@@ -41,7 +63,7 @@ class UserResource extends Resource
                 TextColumn::make('name')->label('Nama User'),
                 TextColumn::make('username')->label('Username'),
                 TextColumn::make('email')->label('Email'),
-                TextColumn::make('kantor_id')->label('Kantor')
+                TextColumn::make('kantor.nama_kantor')->label('Kantor')
             ])
             ->filters([
                 //

@@ -4,6 +4,8 @@ namespace App\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Kantor extends Model
 {
@@ -13,4 +15,10 @@ class Kantor extends Model
         'kode_kantor',
         'nama_kantor',
     ];
+
+    public function user(): HasMany
+    {
+        return $this->hasMany(User::class);
+
+    }
 }

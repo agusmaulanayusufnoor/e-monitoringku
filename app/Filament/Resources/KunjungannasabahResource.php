@@ -23,7 +23,10 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use App\Filament\Resources\KunjungannasabahResource\Pages;
 use App\Filament\Resources\KunjungannasabahResource\RelationManagers;
 
@@ -86,8 +89,8 @@ class KunjungannasabahResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('No.')
-                    ->rowIndex(),
+                // TextColumn::make('No.')
+                //     ->rowIndex(),
                 TextColumn::make('kantor.nama_kantor')->sortable()->searchable(),
                 TextColumn::make('user.name')->label('Nama AO')->sortable()->searchable(),
                 TextColumn::make('tgl_kunjungan')->label('Tanggal')->date('d/m/Y')->sortable()->searchable(),
@@ -100,6 +103,7 @@ class KunjungannasabahResource extends Resource
                 ImageColumn::make('poto')
             ])
             ->defaultSort('id', 'desc')
+
             ->filters([
                 Filter::make('tgl_kunjungan')
                     ->form([
@@ -143,9 +147,13 @@ class KunjungannasabahResource extends Resource
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                // ExportAction::make()->exports([
+                //     ExcelExport::make('table')->withFilename(fn ($resource) => $resource::getLabel()),
+                // ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()->label("Export Excel"),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

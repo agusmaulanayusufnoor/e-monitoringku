@@ -16,11 +16,15 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
@@ -59,7 +63,10 @@ class KunjungannasabahResource extends Resource
                             ->autocapitalize(),
                         TextInput::make('nama_nasabah')->required()
                             ->label('Nama Nasabah'),
-                        Select::make('kolektibilitas')
+                        Select::make('kolektibilitas')->required()
+                            ->validationMessages([
+                                'required' => 'Kolek belum dipilih',
+                            ])
                             ->options([
                                 'L' => 'L',
                                 'DPK' => 'DPK',
@@ -74,7 +81,14 @@ class KunjungannasabahResource extends Resource
                             ->placeholder('Contoh: -6.678209, 107.687488'),
                         Textarea::make('hasil')->required()
                             ->label('Hasil/Keterangan'),
-                        FileUpload::make('poto')->directory('potokunjungan')
+                        FileUpload::make('poto')->required()
+                            ->validationMessages([
+                                'required' => 'Poto belum diupload',
+                            ])
+                            ->label('Poto Kunjungan')
+                            ->image()
+                            ->downloadable()
+                            ->directory('potokunjungan')
                             ->preserveFilenames(),
                         Hidden::make('user_id')
                             ->default(auth()->user()->id),
@@ -144,12 +158,15 @@ class KunjungannasabahResource extends Resource
                     ])
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                // ExportAction::make()->exports([
-                //     ExcelExport::make('table')->withFilename(fn ($resource) => $resource::getLabel()),
-                // ])
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ]),
+                // Tables\Actions\ViewAction::make(),
+                // Tables\Actions\EditAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

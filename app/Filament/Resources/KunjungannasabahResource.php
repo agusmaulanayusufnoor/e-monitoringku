@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use stdClass;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
@@ -19,6 +20,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
@@ -104,7 +106,17 @@ class KunjungannasabahResource extends Resource
         return $table
             ->columns([
                 // TextColumn::make('No.')
-                //     ->rowIndex(),
+                // ->rowIndex(),
+                // TextColumn::make('No.')->state(
+                //     static function (HasTable $livewire, stdClass $rowLoop): string {
+                //         return (string) (
+                //             $rowLoop->iteration +
+                //             ($livewire->getTableRecordsPerPage() * (
+                //                 $livewire->getTablePage() - 1
+                //             ))
+                //         );
+                //     }
+                // ),
                 TextColumn::make('kantor.nama_kantor')->sortable()->searchable(),
                 TextColumn::make('user.name')->label('Nama AO')->sortable()->searchable(),
                 TextColumn::make('tgl_kunjungan')->label('Tanggal')->date('d/m/Y')->sortable()->searchable(),

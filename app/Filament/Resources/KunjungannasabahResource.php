@@ -27,8 +27,8 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\BulkActionGroup;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use App\Filament\Resources\KunjungannasabahResource\Pages;
@@ -162,6 +162,10 @@ class KunjungannasabahResource extends Resource
                     ViewAction::make(),
                     EditAction::make(),
                     DeleteAction::make(),
+                    // ExportAction::make()->exports([
+                    //     ExcelExport::make('table')->fromTable()->askForFilename(),
+                    //     ExcelExport::make('form')->fromForm(),
+                    // ])->label('Ekspor Excel')
                 ]),
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
@@ -169,10 +173,20 @@ class KunjungannasabahResource extends Resource
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    ExportBulkAction::make()->label("Export Excel"),
+                BulkActionGroup::make([
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make('table')->fromTable()
+                        ->askForFilename()
+                        ->withWriterType(\Maatwebsite\Excel\Excel::XLSX),
+                        //ExcelExport::make('form')->fromForm(),
+                    ])->label('Ekspor Excel'),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+                
+                //Tables\Actions\BulkActionGroup::make([
+                    //ExportBulkAction::make()->label("Export Excel"),
+                    //Tables\Actions\DeleteBulkAction::make(),
+                //]),
             ]);
     }
 

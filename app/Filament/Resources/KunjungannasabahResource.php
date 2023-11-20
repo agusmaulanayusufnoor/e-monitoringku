@@ -10,6 +10,7 @@ use App\Models\Kantor;
 use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Maatwebsite\Excel\Excel;
 use App\Models\Kunjungannasabah;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
@@ -189,16 +190,17 @@ class KunjungannasabahResource extends Resource
                     ExportBulkAction::make()->exports([
                         ExcelExport::make('table')->fromTable()
                         ->askForFilename()
-                        ->withWriterType(\Maatwebsite\Excel\Excel::XLSX),
+                        ->withWriterType(Excel::XLSX),
                         //ExcelExport::make('form')->fromForm(),
                     ])->label('Ekspor Excel'),
+
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-                
-                //Tables\Actions\BulkActionGroup::make([
-                    //ExportBulkAction::make()->label("Export Excel"),
-                    //Tables\Actions\DeleteBulkAction::make(),
-                //]),
+
+                // Tables\Actions\BulkActionGroup::make([
+                //     ExportBulkAction::make()->label("Export Excel"),
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 

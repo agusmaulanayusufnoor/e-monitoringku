@@ -108,7 +108,7 @@ class AdminPanelProvider extends PanelProvider
                                 ->url(fn (): string => '/admin/permissions'),
                         ]),
                 ]);
-            });
-            //->spa();
+            })
+            ->spa();
     }
 }

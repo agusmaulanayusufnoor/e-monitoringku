@@ -63,7 +63,11 @@ class KunjungannasabahResource extends Resource
                             ->label('Tanggal Kunjungan'),
                         TextInput::make('no_rekening')->required()
                             ->label('No. Rekening')
-                            ->autocapitalize(),
+                            ->autocapitalize()
+                            ->rules(['required', 'max:14'])
+                            ->validationMessages([
+                                'max' => 'no rekening tidak boleh lebih dari 14 huruf',
+                            ]),
                         TextInput::make('nama_nasabah')->required()
                             ->label('Nama Nasabah'),
                         Select::make('kolektibilitas')->required()

@@ -10,6 +10,7 @@ use App\Models\Kantor;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Spatie\Permission\Traits\HasRoles;
 use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
@@ -31,6 +32,7 @@ use App\Filament\Resources\UserResource\RelationManagers;
 
 class UserResource extends Resource
 {
+    use HasRoles;
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
@@ -68,6 +70,7 @@ class UserResource extends Resource
                         Select::make('roles')
                             ->multiple()
                             ->relationship('roles','name'),
+
                     ])
                     ->columns(3),
 

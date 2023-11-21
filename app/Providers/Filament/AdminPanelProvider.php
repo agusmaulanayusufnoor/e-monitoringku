@@ -27,6 +27,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
+use Spatie\Permission\Traits\HasRoles;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -107,7 +108,7 @@ class AdminPanelProvider extends PanelProvider
                                 ->url(fn (): string => '/admin/permissions'),
                         ]),
                 ]);
-            })
-            ->spa();
+            });
+            //->spa();
     }
 }

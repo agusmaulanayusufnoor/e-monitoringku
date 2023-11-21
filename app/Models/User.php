@@ -3,16 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Panel;
 use App\Models\Kantor;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasPermissions;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions;
 
@@ -52,5 +54,10 @@ class User extends Authenticatable
     public function kantor(): BelongsTo
     {
         return $this->belongsTo(Kantor::class);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasRole(['admin','adminpanel','userao']);
     }
 }

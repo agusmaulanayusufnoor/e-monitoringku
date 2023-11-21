@@ -69,7 +69,7 @@ class UserResource extends Resource
                             ->searchable(),
                         Select::make('roles')
                             ->multiple()
-                            ->relationship('roles','name'),
+                            ->relationship('roles','name')->preload(),
 
                     ])
                     ->columns(3),

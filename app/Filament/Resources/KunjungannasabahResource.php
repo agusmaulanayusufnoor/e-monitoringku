@@ -205,7 +205,9 @@ class KunjungannasabahResource extends Resource
                 //     ExportBulkAction::make()->label("Export Excel"),
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
-            ]);
+            ])
+            ->striped()
+            ->paginated([10, 25, 50, 100, 'all']);
     }
 
     public static function getRelations(): array

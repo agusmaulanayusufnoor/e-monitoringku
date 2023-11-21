@@ -30,25 +30,25 @@ class KantorResource extends Resource
 
     protected static ?string $navigationGroup = 'Setting';
 
-    protected static ?int $navigationSort = 32;
+    protected static ?int $navigationSort = 22;
     //protected static bool $shouldRegisterNavigation = false;
 
 
-    // public static function shouldRegisterNavigation():bool
-    // {
-    //     $user = auth()->user();
-    //     if ($user->hasRole('userao')){
-    //         echo "userao";
-    //     return true;
-    //     }
+    public static function shouldRegisterNavigation():bool
+    {
+        $user = auth()->user();
+        if ($user->hasRole('admin')){
+            //echo "userao";
+        return true;
+        }
 
-    //     else {
-    //         echo "bukanao";
-    //         return false;
-    //     }
+        else {
+           // echo "bukanao";
+            return false;
+        }
 
 
-    // }
+    }
 
     public static function form(Form $form): Form
     {

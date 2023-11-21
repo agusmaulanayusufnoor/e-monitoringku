@@ -10,10 +10,10 @@ class UserPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
-    {
-        return $user->hasRole(['admin','adminpanel']);
-    }
+    // public function viewAny(User $user): bool
+    // {
+    //     return $user->hasRole(['admin','adminpanel']);
+    // }
 
     /**
      * Determine whether the user can view the model.
@@ -36,7 +36,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return $user->hasRole(['admin']);
+        return $user->can('ubah user');
     }
 
     /**

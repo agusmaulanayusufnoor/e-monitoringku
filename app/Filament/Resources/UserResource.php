@@ -41,7 +41,19 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'Setting';
 
-    protected static ?int $navigationSort = 31;
+    protected static ?int $navigationSort = 21;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        $user = auth()->user();
+        if ($user->hasRole('userao') ) {
+
+            return false;
+        } else {
+
+            return true;
+        }
+    }
 
     public static function form(Form $form): Form
     {
@@ -69,7 +81,7 @@ class UserResource extends Resource
                             ->searchable(),
                         Select::make('roles')
                             ->multiple()
-                            ->relationship('roles','name')->preload(),
+                            ->relationship('roles', 'name')->preload(),
 
                     ])
                     ->columns(3),

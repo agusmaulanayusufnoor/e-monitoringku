@@ -14,8 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-//class User extends Authenticatable implements FilamentUser
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
+//class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasPermissions;
 
@@ -57,8 +57,8 @@ class User extends Authenticatable
         return $this->belongsTo(Kantor::class);
     }
 
-    // public function canAccessPanel(Panel $panel): bool
-    // {
-    //     return $this->hasRole(['admin','adminpanel','userao']);
-    // }
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasRole(['admin','adminpanel','userao']);
+    }
 }

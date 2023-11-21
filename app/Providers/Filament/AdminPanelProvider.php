@@ -69,7 +69,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
+            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
             // ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
             //     return $builder->groups([
             //         NavigationGroup::make()
@@ -110,6 +110,6 @@ class AdminPanelProvider extends PanelProvider
             //             ]),
             //     ]);
             // })
-            ->spa();
+           // ->spa();
     }
 }

@@ -162,8 +162,9 @@ class KunjungannasabahResource extends Resource
                         '1' => 'Pusat',
                         '2' => 'Cab. Cisalak',
                         '3' => 'Cab. KPO',
-                        '4' => 'Cab. Purwadadi',
-                        '5' => 'Cab. Pamanukan',
+                        '4' => 'Cab. Subang',
+                        '5' => 'Cab. Purwadadi',
+                        '6' => 'Cab. Pamanukan',
                     ]),
                 SelectFilter::make('kolektibilitas')
                     ->options([

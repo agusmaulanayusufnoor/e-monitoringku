@@ -10,14 +10,15 @@ use App\Models\Kantor;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Spatie\Permission\Traits\HasRoles;
 use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Pages\Actions\EditAction;
+use Spatie\Permission\Traits\HasRoles;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Testing\Fluent\Concerns\Has;
@@ -46,7 +47,7 @@ class UserResource extends Resource
     public static function shouldRegisterNavigation(): bool
     {
         $user = auth()->user();
-        if ($user->hasRole('userao') ) {
+        if ($user->hasRole('userao')) {
 
             return false;
         } else {
@@ -96,14 +97,28 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('No.')
                     ->rowIndex(),
-                TextColumn::make('name')->label('Nama User'),
-                TextColumn::make('username')->label('Username'),
-                TextColumn::make('email')->label('Email'),
-                TextColumn::make('kantor.nama_kantor')->label('Kantor'),
-                TextColumn::make('roles.name')->label('Roles')
+                TextColumn::make('name')->label('Nama User')->sortable()->searchable(),
+                TextColumn::make('username')->label('Username')->sortable()->searchable(),
+                TextColumn::make('email')->label('Email')->sortable()->searchable(),
+                TextColumn::make('kantor.nama_kantor')->label('Kantor')->sortable()->searchable(),
+                TextColumn::make('roles.name')->label('Roles')->sortable()->searchable()
             ])
             ->filters([
-                //
+                SelectFilter::make('kantor_id')
+                    ->label('Kantor')
+                    ->options([
+                        '1' => 'Pusat',
+                        '2' => 'Cab. Cisalak',
+                        '3' => 'Cab. KPO',
+                        '4' => 'Cab. Subang',
+                        '5' => 'Cab. Purwadadi',
+                        '6' => 'Cab. Pamanukan',
+                    ]),
+                SelectFilter::make('roles')
+                    ->label('Roles')
+                    ->multiple()
+                    ->relationship('roles', 'name')->preload(),
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -113,7 +128,8 @@ class UserResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->striped();
     }
 
     public static function getRelations(): array

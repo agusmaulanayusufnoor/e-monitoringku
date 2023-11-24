@@ -11,9 +11,8 @@ use App\Filament\Pages\Auth\Login;
 use Filament\Support\Colors\Color;
 use Filament\Navigation\NavigationItem;
 use App\Filament\Pages\Auth\EditProfile;
-use App\Filament\Resources\UserResource;
 use Filament\Navigation\NavigationGroup;
-use App\Filament\Resources\KantorResource;
+use App\Filament\Resources\DataCountResource\Widgets\DataCount;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
 use Illuminate\Session\Middleware\StartSession;
@@ -52,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
+                DataCount::class,
                 //Widgets\FilamentInfoWidget::class,
             ])
             ->sidebarCollapsibleOnDesktop()

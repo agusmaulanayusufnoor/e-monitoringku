@@ -80,6 +80,7 @@ class KunjungannasabahResource extends Resource
                                 'KL' => 'KL',
                                 'D' => 'D',
                                 'M' => 'M',
+                                'HB' => 'HB',
                             ])->native(false),
                         TextInput::make('no_tlp_nasabah')->required()
                             ->label('No. Telepon Nasabah'),
@@ -173,6 +174,7 @@ class KunjungannasabahResource extends Resource
                         'KL' => 'KL',
                         'D' => 'D',
                         'M' => 'M',
+                        'HB' => 'HB',
                     ])
             ])
             ->actions([

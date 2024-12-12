@@ -44,20 +44,20 @@ class KunjungannasabahResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationLabel = 'Form Kunjungan Nasabah';
+    protected static ?string $navigationLabel = 'Kunjungan Nasabah Kredit';
 
     protected static ?string $navigationGroup = 'Monitoring Bisnis';
 
-    protected static ?string $modelLabel = 'Form Kunjungan Nasabah';
+    protected static ?string $modelLabel = 'Form Kunjungan Nasabah Kredit';
 
-   // protected static ?int $navigationSort = 21;
+    protected static ?int $navigationSort = 11;
 
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Section::make('Form Kunjungan Nasabah')
+                Section::make('Form Kunjungan Nasabah Kredit')
                     ->schema([
                         DatePicker::make('tgl_kunjungan')->required()
                             ->label('Tanggal Kunjungan'),

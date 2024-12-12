@@ -9,27 +9,45 @@ use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
 use App\Filament\Pages\Auth\Login;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
+use Filament\Widgets\AccountWidget;
+use Illuminate\Support\Facades\Blade;
+use Spatie\Permission\Traits\HasRoles;
 use Filament\Navigation\NavigationItem;
 use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Resources\UserResource;
 use Filament\Navigation\NavigationGroup;
-use App\Filament\Resources\DataCountResource\Widgets\DataCount;
+use Filament\Widgets\FilamentInfoWidget;
+use App\Filament\Resources\KantorResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Navigation\NavigationBuilder;
+use Filament\Support\Facades\FilamentView;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use App\Filament\Resources\DanaResource;
 use App\Filament\Resources\KunjungannasabahResource;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+    /**
+     * Customize the Filament admin panel.
+     *
+     * @param  \Filament\Panel  $panel
+     * @return \Filament\Panel
+     */
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use App\Filament\Resources\DataCountResource\Widgets\DataCount;
 use Althinect\FilamentSpatieRolesPermissions\FilamentSpatieRolesPermissionsPlugin;
-use Spatie\Permission\Traits\HasRoles;
 
 class AdminPanelProvider extends PanelProvider
 {
+    public function boot()
+    {
+        FilamentView::registerRenderHook(PanelsRenderHook::HEAD_END, fn(): string => Blade::render('@vite(["resources/css/app.css", "resources/js/app.js","resources/js/textinput.js"])'));
+    }
     public function panel(Panel $panel): Panel
     {
         return $panel
@@ -69,7 +87,7 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(FilamentSpatieRolesPermissionsPlugin::make());
+            ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
             // ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
             //     return $builder->groups([
             //         NavigationGroup::make()
@@ -82,6 +100,7 @@ class AdminPanelProvider extends PanelProvider
             //         NavigationGroup::make('Monitoring Bisnis')
             //             ->items([
             //                 ...KunjungannasabahResource::getNavigationItems(),
+            //                 ...DanaResource::getNavigationItems(),
             //             ]),
             //         NavigationGroup::make('Setting')
             //             ->items([
@@ -106,10 +125,11 @@ class AdminPanelProvider extends PanelProvider
             //                         'filament.admin.resources.permissions.edit',
             //                     ]))
             //                     ->url(fn (): string => '/admin/permissions'),
-                                
+
             //             ]),
             //     ]);
-            // })
-           // ->spa();
+            // });
+
+            ->spa();
     }
 }

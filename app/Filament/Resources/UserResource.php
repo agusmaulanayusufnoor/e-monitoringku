@@ -47,11 +47,10 @@ class UserResource extends Resource
     public static function shouldRegisterNavigation(): bool
     {
         $user = auth()->user();
-        if ($user->hasRole('userao')) {
-
+    
+        if ($user->hasRole('userao') || $user->hasRole('aodana')) {
             return false;
         } else {
-
             return true;
         }
     }

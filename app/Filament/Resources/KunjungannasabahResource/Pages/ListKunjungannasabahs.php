@@ -15,6 +15,7 @@ class ListKunjungannasabahs extends ListRecords
     //use HasRoles;
     protected static string $resource = KunjungannasabahResource::class;
 
+
     protected function getHeaderActions(): array
     {
         return [
@@ -25,16 +26,26 @@ class ListKunjungannasabahs extends ListRecords
     protected function getTableQuery(): Builder
     {
 
-        if (Auth::user()->hasRole('adminpanel')){
-            return Kunjungannasabah::where('kantor_id',Auth::user()->kantor_id);
-        }
-       else if (Auth::user()->hasRole('userao')){
-        return Kunjungannasabah::where('user_id',Auth::user()->id);
-       }else{
-        $kunjungannasabah = Kunjungannasabah::where('id', '>', 0);
-          return $kunjungannasabah;
-       }
-        //return Kunjungannasabah::where('user_id',Auth::user()->id);
+        // Start with the base query
 
+        $query = Kunjungannasabah::query();
+
+        // Apply conditions based on user roles
+
+        if (Auth::user()->hasRole('adminpanel')) {
+
+            $query->where('kantor_id', Auth::user()->kantor_id)->limit(10);
+        } elseif (Auth::user()->hasRole('userao')) {
+
+            $query->where('user_id', Auth::user()->id)->limit(10);
+        } elseif (Auth::user()->hasRole('admin')) {
+
+            // For admin, you can limit the results
+
+            // Note: You can also remove the limit if you want to return all records
+
+            $query->limit(10);
+        }
+        return $query;
     }
 }

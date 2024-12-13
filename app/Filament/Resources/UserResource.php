@@ -48,10 +48,10 @@ class UserResource extends Resource
     {
         $user = auth()->user();
     
-        if ($user->hasRole('userao') || $user->hasRole('aodana')) {
-            return false;
-        } else {
+        if ($user->hasRole('admin')) {
             return true;
+        } else {
+            return false;
         }
     }
 

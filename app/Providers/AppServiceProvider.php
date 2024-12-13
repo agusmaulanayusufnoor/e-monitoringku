@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;  
-use Filament\Support\Facades\FilamentAsset;  
-use Filament\Support\Assets\Js;  
+use Illuminate\Support\ServiceProvider;
+use Filament\Support\Facades\FilamentAsset;
+use Filament\Support\Assets\Js;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
         FilamentAsset::register([
             Js::make('custom-script', __DIR__ . '/../../resources/js/custom.js')->loadedOnRequest(),
         ]);
+
+        if(config('app.env') === 'production') {
+            $this->app['request']->server->set('HTTPS', true);
+        }
     }
 
     /**
@@ -23,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
     }
 }

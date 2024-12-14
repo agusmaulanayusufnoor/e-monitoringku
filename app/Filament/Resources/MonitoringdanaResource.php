@@ -109,9 +109,11 @@ class MonitoringdanaResource extends Resource
                 TextColumn::make('user.name')->label('Nama AO')->sortable()->searchable(),
                 TextColumn::make('tgl_kunjungan')->label('Tanggal')->date('d/m/Y')->sortable()->searchable(),
                 TextColumn::make('jml_noa')->label('Jmlah NoA')->sortable()->searchable(),
-                TextColumn::make('jml_setoran')->label('Jumlah Setoran')->sortable()->searchable(),
+                TextColumn::make('jml_setoran')->label('Jumlah Setoran')
+                ->money('IDR', locale: 'id')->sortable()->searchable(),
                 TextColumn::make('jml_noa_baru')->label('Jmlah NoA')->sortable()->searchable(),
-                TextColumn::make('jml_setoran_baru')->label('Jumlah Setoran Baru')->sortable()->searchable(),
+                TextColumn::make('jml_setoran_baru')->label('Jumlah Setoran Baru')
+                ->money('IDR', locale: 'id')->sortable()->searchable(),
                 TextColumn::make('keterangan')->label('Keterangan')->sortable()->searchable(),
             ])
             ->defaultSort('id', 'desc')

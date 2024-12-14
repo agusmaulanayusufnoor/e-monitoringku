@@ -25,12 +25,13 @@ use Filament\Tables\Filters\SelectFilter;
 // use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Columns\Summarizers\Sum;
 // use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Actions\DeleteBulkAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
-use App\Filament\Resources\MonitoringdanaResource\Pages;
 // use App\Filament\Resources\MonitoringdanaResource\RelationManagers;
+use App\Filament\Resources\MonitoringdanaResource\Pages;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use App\Filament\Resources\MonitoringdanaResource\Pages\EditMonitoringdana;
 use App\Filament\Resources\MonitoringdanaResource\Pages\ListMonitoringdanas;
@@ -110,10 +111,14 @@ class MonitoringdanaResource extends Resource
                 TextColumn::make('tgl_kunjungan')->label('Tanggal')->date('d/m/Y')->sortable()->searchable(),
                 TextColumn::make('jml_noa')->label('Jmlah NoA')->sortable()->searchable(),
                 TextColumn::make('jml_setoran')->label('Jumlah Setoran')
-                ->money('IDR', locale: 'id')->sortable()->searchable(),
+                ->money('IDR', locale: 'id')
+                ->summarize(Sum::make()->label('Total Setoran'))
+                ->sortable()->searchable(),
                 TextColumn::make('jml_noa_baru')->label('Jmlah NoA')->sortable()->searchable(),
                 TextColumn::make('jml_setoran_baru')->label('Jumlah Setoran Baru')
-                ->money('IDR', locale: 'id')->sortable()->searchable(),
+                ->money('IDR', locale: 'id')
+                ->summarize(Sum::make()->label('Total Setoran NoA Baru'))
+                ->sortable()->searchable(), 
                 TextColumn::make('keterangan')->label('Keterangan')->sortable()->searchable(),
             ])
             ->defaultSort('id', 'desc')

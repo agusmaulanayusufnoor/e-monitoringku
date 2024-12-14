@@ -17,8 +17,9 @@ class Monitoringdana extends Model
         'jml_setoran',
         'jml_noa_baru',
         'jml_setoran_baru',
+        'keterangan',
         'kantor_id',
-        'user_id',
+        'user_id',   
     ];
 
     public function kantor(): BelongsTo

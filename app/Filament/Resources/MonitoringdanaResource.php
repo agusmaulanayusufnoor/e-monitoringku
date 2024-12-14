@@ -6,13 +6,14 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Maatwebsite\Excel\Excel;
-use Illuminate\Support\Carbon;
 use App\Models\Monitoringdana;
+use Illuminate\Support\Carbon;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\Indicator;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Filters\Indicator;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -21,16 +22,16 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
 // use Filament\Support\Facades\FilamentAsset;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteBulkAction;
-use pxlrbt\FilamentExcel\Exports\ExcelExport;
 // use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use App\Filament\Resources\MonitoringdanaResource\Pages;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 // use App\Filament\Resources\MonitoringdanaResource\RelationManagers;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use App\Filament\Resources\MonitoringdanaResource\Pages\EditMonitoringdana;
 use App\Filament\Resources\MonitoringdanaResource\Pages\ListMonitoringdanas;
 use App\Filament\Resources\MonitoringdanaResource\Pages\CreateMonitoringdana;
@@ -74,6 +75,10 @@ class MonitoringdanaResource extends Resource
                             ->id('jml_setoran_baru')
                             ->default(0)
                             ->prefix('Rp'),
+                        Textarea::make('keterangan')
+                            ->label('Keterangan')
+                            ->default('')
+                            ->rows(3),
                         Hidden::make('user_id')
                             ->default(auth()->user()->id),
                         Hidden::make('kantor_id')
@@ -107,7 +112,7 @@ class MonitoringdanaResource extends Resource
                 TextColumn::make('jml_setoran')->label('Jumlah Setoran')->sortable()->searchable(),
                 TextColumn::make('jml_noa_baru')->label('Jmlah NoA')->sortable()->searchable(),
                 TextColumn::make('jml_setoran_baru')->label('Jumlah Setoran Baru')->sortable()->searchable(),
-
+                TextColumn::make('keterangan')->label('Keterangan')->sortable()->searchable(),
             ])
             ->defaultSort('id', 'desc')
 

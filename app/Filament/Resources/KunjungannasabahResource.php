@@ -66,9 +66,10 @@ class KunjungannasabahResource extends Resource
                         TextInput::make('no_rekening')->required()
                             ->label('No. Rekening')
                             ->autocapitalize()
-                            ->rules(['required', 'max:14'])
+                            ->rules(['required','min:12', 'max:14'])
                             ->validationMessages([
-                                'max' => 'no rekening tidak boleh lebih dari 14 huruf',
+                                'min' => 'no rekening tidak boleh kurang dari 12 digit',
+                                'max' => 'no rekening tidak boleh lebih dari 14 digit',
                             ]),
                         TextInput::make('nama_nasabah')->required()
                             ->label('Nama Nasabah'),

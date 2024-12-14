@@ -6,9 +6,11 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Maatwebsite\Excel\Excel;
+use Illuminate\Support\Carbon;
 use App\Models\Monitoringdana;
 use Filament\Resources\Resource;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\Indicator;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\EditAction;
@@ -119,6 +121,21 @@ class MonitoringdanaResource extends Resource
                             ->native(false)
                             ->displayFormat('d/m/Y'),
                     ])
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                 
+                        if ($data['dari_tanggal'] ?? null) {
+                            $indicators[] = Indicator::make('Dari Tanggal ' . Carbon::parse($data['dari_tanggal'])->toFormattedDateString())
+                                ->removeField('dari_tanggal');
+                        }
+                 
+                        if ($data['sampai_tanggal'] ?? null) {
+                            $indicators[] = Indicator::make('Sampai Tanggal ' . Carbon::parse($data['sampai_tanggal'])->toFormattedDateString())
+                                ->removeField('sampai_tanggal');
+                        }
+                 
+                        return $indicators;
+                    })
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(

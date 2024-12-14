@@ -88,6 +88,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugin(FilamentSpatieRolesPermissionsPlugin::make())
+            ->plugin(\TomatoPHP\FilamentPWA\FilamentPWAPlugin::make())
             // ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
             //     return $builder->groups([
             //         NavigationGroup::make()

@@ -17,6 +17,7 @@
 
         @filamentStyles
         @vite('resources/css/app.css')
+        @filamentPWA
     </head>
 
     <body class="antialiased">

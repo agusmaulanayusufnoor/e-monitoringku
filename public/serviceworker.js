@@ -3,12 +3,12 @@ var filesToCache = [
     '/offline',
     '/css/app.css',
     '/js/app.js',
-"
+
 ];
 
 // Cache on install
 self.addEventListener("install", event => {
-    this.skipWaiting();
+    self.skipWaiting();
     event.waitUntil(
         caches.open(staticCacheName)
             .then(cache => {

@@ -31,12 +31,12 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-    /**
-     * Customize the Filament admin panel.
-     *
-     * @param  \Filament\Panel  $panel
-     * @return \Filament\Panel
-     */
+/**
+ * Customize the Filament admin panel.
+ *
+ * @param  \Filament\Panel  $panel
+ * @return \Filament\Panel
+ */
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use App\Filament\Resources\DataCountResource\Widgets\DataCount;
@@ -57,7 +57,12 @@ class AdminPanelProvider extends PanelProvider
             ->login(Login::class)
             ->profile(EditProfile::class)
             ->colors([
-                'primary' => Color::Amber,
+                'danger' => Color::Rose,
+                'gray' => Color::Gray,
+                'info' => Color::Blue,
+                'primary' => Color::Indigo,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
             ->brandLogo(asset('images/logo.png'))
             //->favicon(asset('images/favicon.ico'))

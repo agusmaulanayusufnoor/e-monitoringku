@@ -33,17 +33,17 @@ class ListMonitoringdanas extends ListRecords
 
         if (Auth::user()->hasRole('adminpanel')) {
 
-            $query->where('kantor_id', Auth::user()->kantor_id)->limit(10);
-        } elseif (Auth::user()->hasRole('userao')) {
+            $query->where('kantor_id', Auth::user()->kantor_id);
+        } elseif (Auth::user()->hasRole('aodana')) {
 
-            $query->where('user_id', Auth::user()->id)->limit(10);
+            $query->where('user_id', Auth::user()->id);
         } elseif (Auth::user()->hasRole('admin')) {
 
             // For admin, you can limit the results
 
             // Note: You can also remove the limit if you want to return all records
 
-            $query->limit(10);
+            $query;
         }
         return $query;
     }

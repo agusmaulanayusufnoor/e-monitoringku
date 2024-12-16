@@ -13,9 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        FilamentAsset::register([
-            Js::make('custom-script', __DIR__ . '/../../resources/js/custom.js')->loadedOnRequest(),
-        ]);
+        // FilamentAsset::register([
+        //     Js::make('custom-script', __DIR__ . '/../../resources/js/custom.js')->loadedOnRequest(),
+        // ]);
 
         if(config('app.env') === 'production') {
             $this->app['request']->server->set('HTTPS', true);

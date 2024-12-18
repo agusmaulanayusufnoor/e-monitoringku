@@ -3,14 +3,16 @@
 namespace App\Filament\Resources\KunjungannasabahResource\Pages;
 
 use Filament\Actions;
+use Illuminate\Support\Carbon;
 use App\Models\Kunjungannasabah;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Filament\Resources\Components\Tab;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Resources\Components\Tab;
+use Illuminate\Contracts\Pagination\Paginator;
 use App\Filament\Resources\KunjungannasabahResource;
-use Illuminate\Support\Carbon;
 
 class ListKunjungannasabahs extends ListRecords
 {
@@ -24,31 +26,29 @@ class ListKunjungannasabahs extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+    protected function paginateTableQuery(Builder $query): Paginator
+{
+    $perPage = ($this->getTableRecordsPerPage() === 'all') ? 1000 : $this->getTableRecordsPerPage(); // Batasi per halaman
+
+    return $query->fastPaginate($perPage);
+}
 
     protected function getTableQuery(): Builder
     {
+            $query = Kunjungannasabah::query();
 
-        // Start with the base query
+            // Apply conditions based on user roles
+            if (Auth::user()->hasRole('adminpanel')) {
+                $query->where('kantor_id', Auth::user()->kantor_id);
+            } elseif (Auth::user()->hasRole('userao')) {
+                $query->where('user_id', Auth::user()->id);
+            } elseif (Auth::user()->hasRole('admin')) {
+                // Admin can see all records
+            }
 
-        $query = Kunjungannasabah::query();
+            // Ambil hasil query
+            return $query; // Mengambil hasil query
 
-        // Apply conditions based on user roles
-
-        if (Auth::user()->hasRole('adminpanel')) {
-
-            $query->where('kantor_id', Auth::user()->kantor_id);
-        } elseif (Auth::user()->hasRole('userao')) {
-
-            $query->where('user_id', Auth::user()->id);
-        } elseif (Auth::user()->hasRole('admin')) {
-
-            // For admin, you can limit the results
-
-            // Note: You can also remove the limit if you want to return all records
-
-           // $query->limit(20);
-        }
-        return $query;
     }
 
     public function getTabs(): array

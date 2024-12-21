@@ -24,6 +24,7 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
@@ -37,6 +38,7 @@ use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use App\Filament\Resources\KunjungannasabahResource\Pages;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use App\Filament\Resources\KunjungannasabahResource\RelationManagers;
 
 class KunjungannasabahResource extends Resource
@@ -66,7 +68,7 @@ class KunjungannasabahResource extends Resource
                         TextInput::make('no_rekening')->required()
                             ->label('No. Rekening')
                             ->autocapitalize()
-                            ->rules(['required','min:12', 'max:14'])
+                            ->rules(['required', 'min:12', 'max:14'])
                             ->validationMessages([
                                 'min' => 'no rekening tidak boleh kurang dari 12 digit',
                                 'max' => 'no rekening tidak boleh lebih dari 14 digit',
@@ -92,7 +94,8 @@ class KunjungannasabahResource extends Resource
                             ->placeholder('Contoh: -6.678209, 107.687488'),
                         Textarea::make('hasil')->required()
                             ->label('Hasil/Keterangan'),
-                        FileUpload::make('poto')->required()
+                        FileUpload::make('poto')
+                            ->required()
                             ->validationMessages([
                                 'required' => 'Poto belum diupload',
                             ])
@@ -100,7 +103,12 @@ class KunjungannasabahResource extends Resource
                             ->image()
                             ->downloadable()
                             ->directory('potokunjungan')
-                            ->preserveFilenames(),
+                            ->preserveFilenames(false)  // Menonaktifkan penggunaan nama asli file
+                            ->getUploadedFileNameForStorageUsing(
+                                fn(TemporaryUploadedFile $file): string => (string) str(uniqid('kunjungan_', true) . '.' . $file->getClientOriginalName())
+                                    ->prepend('poto-'),
+                            ),
+
                         Hidden::make('user_id')
                             ->default(auth()->user()->id),
                         Hidden::make('kantor_id')
@@ -151,28 +159,28 @@ class KunjungannasabahResource extends Resource
                     ])
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
-                 
+
                         if ($data['dari_tanggal'] ?? null) {
                             $indicators[] = Indicator::make('Dari Tanggal ' . Carbon::parse($data['dari_tanggal'])->toFormattedDateString())
                                 ->removeField('dari_tanggal');
                         }
-                 
+
                         if ($data['sampai_tanggal'] ?? null) {
                             $indicators[] = Indicator::make('Sampai Tanggal ' . Carbon::parse($data['sampai_tanggal'])->toFormattedDateString())
                                 ->removeField('sampai_tanggal');
                         }
-                 
+
                         return $indicators;
                     })
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
                                 $data['dari_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tgl_kunjungan', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('tgl_kunjungan', '>=', $date),
                             )
                             ->when(
                                 $data['sampai_tanggal'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('tgl_kunjungan', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('tgl_kunjungan', '<=', $date),
                             );
                     }),
                 SelectFilter::make('kantor_id')
@@ -199,11 +207,17 @@ class KunjungannasabahResource extends Resource
                 ActionGroup::make([
                     ViewAction::make(),
                     EditAction::make(),
-                    DeleteAction::make(),
-                    // ExportAction::make()->exports([
-                    //     ExcelExport::make('table')->fromTable()->askForFilename(),
-                    //     ExcelExport::make('form')->fromForm(),
-                    // ])->label('Ekspor Excel')
+                    DeleteAction::make()
+                        ->action(function ($record) {
+                            // Menghapus file gambar sebelum menghapus data secara permanen
+                            $filePath = 'potokunjungan/' . $record->poto;
+                            if (Storage::disk('public')->exists($filePath)) {
+                                Storage::disk('public')->delete($filePath);
+                            }
+
+                            // Menghapus data secara permanen menggunakan forceDelete
+                            $record->forceDelete();
+                        }),
                 ]),
                 // Tables\Actions\ViewAction::make(),
                 // Tables\Actions\EditAction::make(),
@@ -214,8 +228,8 @@ class KunjungannasabahResource extends Resource
                 BulkActionGroup::make([
                     ExportBulkAction::make()->exports([
                         ExcelExport::make('table')->fromTable()
-                        ->askForFilename()
-                        ->withWriterType(Excel::XLSX),
+                            ->askForFilename()
+                            ->withWriterType(Excel::XLSX),
                         //ExcelExport::make('form')->fromForm(),
                     ])->label('Ekspor Excel'),
 

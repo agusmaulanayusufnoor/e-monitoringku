@@ -149,7 +149,7 @@ class KunjungannasabahResource extends Resource
                 TextColumn::make('no_tlp_nasabah')->label('No. Telepon')->searchable(),
                 TextColumn::make('hasil')->label('Hasil/Ket.')->searchable(),
                 TextColumn::make('lokasi')->label('Peta Lokasi'),
-                ImageColumn::make('poto'),
+                //ImageColumn::make('poto'),
                 TextColumn::make('jml_setor')->label('Jumlah Setoran')
                 ->money('IDR', locale: 'id')
                 ->summarize(Sum::make()->label('Total Setoran'))

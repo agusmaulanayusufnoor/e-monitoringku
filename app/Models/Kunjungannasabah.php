@@ -22,6 +22,7 @@ class Kunjungannasabah extends Model
         'lokasi',
         'hasil',
         'poto',
+        'jml_setor',
         'kantor_id',
         'user_id',
     ];

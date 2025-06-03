@@ -34,6 +34,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Columns\Summarizers\Sum;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
@@ -108,6 +109,11 @@ class KunjungannasabahResource extends Resource
                                 fn(TemporaryUploadedFile $file): string => (string) str(uniqid('kunjungan_', true) . '.' . $file->getClientOriginalName())
                                     ->prepend('poto-'),
                             ),
+                            TextInput::make('jml_setor')->required()
+                            ->label('Jumlah Setoran')
+                            ->default(0)
+                            ->id('jml_setor')
+                            ->prefix('Rp'),
 
                         Hidden::make('user_id')
                             ->default(auth()->user()->id),
@@ -143,7 +149,11 @@ class KunjungannasabahResource extends Resource
                 TextColumn::make('no_tlp_nasabah')->label('No. Telepon')->searchable(),
                 TextColumn::make('hasil')->label('Hasil/Ket.')->searchable(),
                 TextColumn::make('lokasi')->label('Peta Lokasi'),
-                ImageColumn::make('poto')
+                ImageColumn::make('poto'),
+                TextColumn::make('jml_setor')->label('Jumlah Setoran')
+                ->money('IDR', locale: 'id')
+                ->summarize(Sum::make()->label('Total Setoran'))
+                ->sortable()->searchable(),
             ])
             ->defaultSort('id', 'desc')
 

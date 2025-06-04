@@ -93,8 +93,9 @@ class MonitoringdanaResource extends Resource
     {
         return $table
             ->columns([
-                // TextColumn::make('No.')
-                // ->rowIndex(),
+                TextColumn::make('no')
+                    ->label('No.')
+                    ->rowIndex(),
                 // TextColumn::make('No.')->state(
                 //     static function (HasTable $livewire, stdClass $rowLoop): string {
                 //         return (string) (
@@ -194,7 +195,17 @@ class MonitoringdanaResource extends Resource
                     ExportBulkAction::make()->exports([
                         ExcelExport::make('table')->fromTable()
                             ->askForFilename()
-                            ->withWriterType(Excel::XLSX),
+                            ->withWriterType(Excel::XLSX)
+                            ->only([
+                                'kantor.nama_kantor',
+                                'user.name',
+                                'tgl_kunjungan',
+                                'jml_noa',
+                                'jml_setoran',
+                                'jml_noa_baru',
+                                'jml_setoran_baru',
+                                'keterangan'
+                            ]),
                         //ExcelExport::make('form')->fromForm(),
                     ])->label('Ekspor Excel'),
 

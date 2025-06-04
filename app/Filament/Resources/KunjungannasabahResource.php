@@ -158,18 +158,9 @@ class KunjungannasabahResource extends Resource
     {
         return $table
             ->columns([
-                // TextColumn::make('No.')
-                // ->rowIndex(),
-                // TextColumn::make('No.')->state(
-                //     static function (HasTable $livewire, stdClass $rowLoop): string {
-                //         return (string) (
-                //             $rowLoop->iteration +
-                //             ($livewire->getTableRecordsPerPage() * (
-                //                 $livewire->getTablePage() - 1
-                //             ))
-                //         );
-                //     }
-                // ),
+                TextColumn::make('no')
+                    ->label('No.')
+                    ->rowIndex(),
                 TextColumn::make('kantor.nama_kantor')->sortable()->searchable(),
                 TextColumn::make('user.name')->label('Nama AO')->sortable()->searchable(),
                 TextColumn::make('tgl_kunjungan')->label('Tanggal')->date('d/m/Y')->sortable()->searchable(),
@@ -269,7 +260,22 @@ class KunjungannasabahResource extends Resource
                     ExportBulkAction::make()->exports([
                         ExcelExport::make('table')->fromTable()
                             ->askForFilename()
-                            ->withWriterType(Excel::XLSX),
+                            ->withWriterType(Excel::XLSX)
+                            ->only(
+                                [
+                                    'kantor.nama_kantor',
+                                    'user.name',
+                                    'tgl_kunjungan',
+                                    'no_rekening',
+                                    'nama_nasabah',
+                                    'kolektibilitas',
+                                    'no_tlp_nasabah',
+                                    'hasil',
+                                    'lokasi',
+                                    'jml_setor',
+                                ]
+                                ),
+
                         //ExcelExport::make('form')->fromForm(),
                     ])->label('Ekspor Excel'),
 
@@ -284,7 +290,13 @@ class KunjungannasabahResource extends Resource
             ->striped()
             ->paginated([10, 25, 50, 100, 'all']);
     }
-
+    /**
+     * Get the row number for the table.
+     *
+     * @param  HasTable  $table
+     * @return int
+     */
+   
     public static function getRelations(): array
     {
         return [

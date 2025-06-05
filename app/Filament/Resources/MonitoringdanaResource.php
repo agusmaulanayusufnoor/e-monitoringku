@@ -6,6 +6,8 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Maatwebsite\Excel\Excel;
+use App\Models\Kantor;
+use App\Models\User;
 use App\Models\Monitoringdana;
 use Illuminate\Support\Carbon;
 use Filament\Resources\Resource;
@@ -166,14 +168,7 @@ class MonitoringdanaResource extends Resource
                     }),
                 SelectFilter::make('kantor_id')
                     ->label('Kantor')
-                    ->options([
-                        '1' => 'Pusat',
-                        '2' => 'Cab. Cisalak',
-                        '3' => 'Cab. KPO',
-                        '4' => 'Cab. Subang',
-                        '5' => 'Cab. Purwadadi',
-                        '6' => 'Cab. Pamanukan',
-                    ])
+                    ->options(Kantor::orderBy('id', 'asc')->pluck('nama_kantor', 'id')->toArray())
             ])
             ->actions([
                 ActionGroup::make([

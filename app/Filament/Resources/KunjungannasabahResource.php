@@ -216,14 +216,15 @@ class KunjungannasabahResource extends Resource
                     }),
                 SelectFilter::make('kantor_id')
                     ->label('Kantor')
-                    ->options([
-                        '1' => 'Pusat',
-                        '2' => 'Cab. Cisalak',
-                        '3' => 'Cab. KPO',
-                        '4' => 'Cab. Subang',
-                        '5' => 'Cab. Purwadadi',
-                        '6' => 'Cab. Pamanukan',
-                    ]),
+                    ->options(Kantor::orderBy('id', 'asc')->pluck('nama_kantor', 'id')->toArray()),
+                    // ->options([
+                    //     '1' => 'Pusat',
+                    //     '2' => 'Cab. Cisalak',
+                    //     '3' => 'Cab. KPO',
+                    //     '4' => 'Cab. Subang',
+                    //     '5' => 'Cab. Purwadadi',
+                    //     '6' => 'Cab. Pamanukan',
+                    // ]),
                 SelectFilter::make('kolektibilitas')
                     ->options([
                         'L' => 'L',
@@ -274,7 +275,7 @@ class KunjungannasabahResource extends Resource
                                     'lokasi',
                                     'jml_setor',
                                 ]
-                                ),
+                            ),
 
                         //ExcelExport::make('form')->fromForm(),
                     ])->label('Ekspor Excel'),

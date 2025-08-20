@@ -16,4 +16,12 @@ export default defineConfig({
             ],
         }),
     ],
+    // Tambahkan blok 'server' ini
+    server: {
+        hmr: {
+            host: 'localhost',
+        },
+        host: 'e-monitoringku.test',
+        cors: true,
+    },
 })

@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <meta name="application-name" content="{{ config('app.name') }}" />
-        <meta name="csrf-token" content="{{ csrf_token() }}" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <title>{{ config('app.name') }}</title>
+    <style>[x-cloak] { display: none !important; }</style>
 
-        <style>
-            [x-cloak] {
-                display: none !important;
-            }
-        </style>
+    {{-- Styles Filament --}}
+    @filamentStyles
 
-        @filamentStyles
-        @vite('resources/css/app.css')
-        @filamentPWA
-    </head>
+    {{-- Panggil Vite HANYA SEKALI di sini untuk CSS dan JS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <body class="antialiased">
-        {{ $slot }}
+    {{-- Styles tambahan --}}
+    @stack('styles')
+</head>
+<body class="font-sans antialiased">
 
-        @livewire('notifications')
+    {{-- Slot utama (konten halaman) --}}
+    {{ $slot }}
 
-        @filamentScripts
-        @vite('resources/js/app.js')
-    </body>
+    {{-- Notifikasi bawaan Livewire + Filament --}}
+    @livewire('notifications')
+
+    {{-- Script Filament (sudah include Livewire & Alpine) --}}
+    @filamentScripts
+
+    {{-- Script tambahan --}}
+    @stack('scripts')
+</body>
 </html>

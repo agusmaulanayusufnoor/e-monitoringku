@@ -14,9 +14,11 @@ use Maatwebsite\Excel\Excel;
 use Illuminate\Support\Carbon;
 use App\Models\Kunjungannasabah;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\View;
 use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Filters\Indicator;
 use Filament\Forms\Components\Textarea;
@@ -33,8 +35,10 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Forms\Components\MapPicker;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Columns\Summarizers\Sum;
+use Filament\Forms\Components\Actions\Action;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
@@ -90,11 +94,42 @@ class KunjungannasabahResource extends Resource
                             ])->native(false),
                         TextInput::make('no_tlp_nasabah')->required()
                             ->label('No. Telepon Nasabah'),
-                        TextInput::make('lokasi')->required()
-                            ->label('Peta Lokasi')
-                            ->placeholder('Contoh: -6.678209, 107.687488'),
-                        Textarea::make('hasil')->required()
-                            ->label('Hasil/Keterangan'),
+
+                        TextInput::make('lokasi')
+                            ->label('Koordinat Lokasi')
+                            ->required()
+                            ->rules([
+                                'required',
+                                'regex:/^-?\d+\.\d+,-?\d+\.\d+$/'
+                            ])
+                            ->suffixAction(
+                                Action::make('openMap')
+                                    ->label('Pilih di Peta')
+                                    ->icon('heroicon-o-map-pin')
+                                    ->modalWidth('4xl')
+                                    ->modalSubmitActionLabel('Pilih Lokasi Ini')
+                                    ->form([
+                                        MapPicker::make('selectedLocation')
+                                            ->label('Klik di peta untuk memilih lokasi')
+                                            ->required(),
+                                    ])
+                                    ->action(function (array $data, $set) {
+                                        $set('lokasi', $data['selectedLocation']);
+                                    })
+                            ),
+                        View::make('components.location-preview-map')
+                            ->label('Lokasi di Peta')
+                            ->visible(fn($get) => filled($get('lokasi')))
+                            ->viewData(fn($get) => [
+                                'location' => $get('lokasi'),
+                            ])
+                            ->columnSpanFull(),
+                        Textarea::make('hasil')
+                            ->required()
+                            ->label('Hasil/Keterangan')
+                            ->rows(4)
+                            ->columnSpanFull(),
+
                         FileUpload::make('poto')
                             ->required()
                             ->validationMessages([
@@ -109,7 +144,7 @@ class KunjungannasabahResource extends Resource
                                 fn(TemporaryUploadedFile $file): string => (string) str(uniqid('kunjungan_', true) . '.' . $file->getClientOriginalName())
                                     ->prepend('poto-'),
                             ),
-                            TextInput::make('jml_setor')->required()
+                        TextInput::make('jml_setor')->required()
                             ->label('Jumlah Setoran')
                             ->numeric()
                             ->rules(['required', 'min:0'])
@@ -172,9 +207,9 @@ class KunjungannasabahResource extends Resource
                 TextColumn::make('lokasi')->label('Peta Lokasi'),
                 //ImageColumn::make('poto'),
                 TextColumn::make('jml_setor')->label('Jumlah Setoran')
-                ->money('IDR', locale: 'id')
-                ->summarize(Sum::make()->label('Total Setoran'))
-                ->sortable()->searchable(),
+                    ->money('IDR', locale: 'id')
+                    ->summarize(Sum::make()->label('Total Setoran'))
+                    ->sortable()->searchable(),
             ])
             ->defaultSort('id', 'desc')
 
@@ -183,10 +218,12 @@ class KunjungannasabahResource extends Resource
                     ->form([
                         DatePicker::make('dari_tanggal')
                             ->native(false)
-                            ->displayFormat('d/m/Y'),
+                            ->displayFormat('d/m/Y')
+                            ->locale(config('app.locale', 'id')),
                         DatePicker::make('sampai_tanggal')
                             ->native(false)
-                            ->displayFormat('d/m/Y'),
+                            ->displayFormat('d/m/Y')
+                            ->locale(config('app.locale', 'id')),
                     ])
                     ->indicateUsing(function (array $data): array {
                         $indicators = [];
@@ -217,14 +254,14 @@ class KunjungannasabahResource extends Resource
                 SelectFilter::make('kantor_id')
                     ->label('Kantor')
                     ->options(Kantor::orderBy('id', 'asc')->pluck('nama_kantor', 'id')->toArray()),
-                    // ->options([
-                    //     '1' => 'Pusat',
-                    //     '2' => 'Cab. Cisalak',
-                    //     '3' => 'Cab. KPO',
-                    //     '4' => 'Cab. Subang',
-                    //     '5' => 'Cab. Purwadadi',
-                    //     '6' => 'Cab. Pamanukan',
-                    // ]),
+                // ->options([
+                //     '1' => 'Pusat',
+                //     '2' => 'Cab. Cisalak',
+                //     '3' => 'Cab. KPO',
+                //     '4' => 'Cab. Subang',
+                //     '5' => 'Cab. Purwadadi',
+                //     '6' => 'Cab. Pamanukan',
+                // ]),
                 SelectFilter::make('kolektibilitas')
                     ->options([
                         'L' => 'L',
@@ -297,7 +334,7 @@ class KunjungannasabahResource extends Resource
      * @param  HasTable  $table
      * @return int
      */
-   
+
     public static function getRelations(): array
     {
         return [

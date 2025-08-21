@@ -133,9 +133,9 @@
             return;
         }
 
-        let retina = '/images/marker-icon-2x.png';
-        let normal = '/images/marker-icon.png';
-        let shadow = '/images/marker-shadow.png';
+        let retina = 'https://e-monitor.bprku.com/images/marker-icon-2x.png';
+        let normal = 'https://e-monitor.bprku.com/images/marker-icon.png';
+        let shadow = 'https://e-monitor.bprku.com/images/marker-shadow.png';
 
         console.log("👉 iconRetinaUrl:", retina);
         console.log("👉 iconUrl:", normal);

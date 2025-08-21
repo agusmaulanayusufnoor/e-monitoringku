@@ -122,9 +122,9 @@
 <script>
     // ✅ Custom marker (gunakan asset lokal)
     L.Icon.Default.mergeOptions({
-        iconRetinaUrl: '/images/marker-icon-2x.png',
-        iconUrl: '/images/marker-icon.png',
-        shadowUrl: '/images/marker-shadow.png',
+        iconRetinaUrl: "{{ asset('images/marker-icon-2x.png') }}",
+        iconUrl: "{{ asset('images/marker-icon.png') }}",
+        shadowUrl: "{{ asset('images/marker-shadow.png') }}",
     });
 </script>
 

@@ -120,14 +120,49 @@
 
 @push('scripts')
 <script>
-    // ✅ Custom marker (gunakan asset lokal)
-    L.Icon.Default.mergeOptions({
-        iconRetinaUrl: "{{ asset('images/marker-icon-2x.png') }}",
-        iconUrl: "{{ asset('images/marker-icon.png') }}",
-        shadowUrl: "{{ asset('images/marker-shadow.png') }}",
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("🔍 Debug Leaflet Icon Override...");
+
+        // cek apakah Leaflet sudah ada
+        if (typeof L === "undefined") {
+            console.error("❌ Leaflet (L) belum ter-load!");
+            return;
+        }
+        if (!L.Icon || !L.Icon.Default) {
+            console.error("❌ L.Icon.Default tidak ada!");
+            return;
+        }
+
+        let retina = "{{ asset('images/marker-icon-2x.png') }}";
+        let normal = "{{ asset('images/marker-icon.png') }}";
+        let shadow = "{{ asset('images/marker-shadow.png') }}";
+
+        console.log("👉 iconRetinaUrl:", retina);
+        console.log("👉 iconUrl:", normal);
+        console.log("👉 shadowUrl:", shadow);
+
+        // coba load manual dulu untuk pastikan file tersedia
+        [retina, normal, shadow].forEach(url => {
+            fetch(url)
+                .then(r => {
+                    if (!r.ok) throw new Error(r.status);
+                    console.log("✅ Bisa load:", url);
+                })
+                .catch(e => console.error("❌ Gagal load:", url, e));
+        });
+
+        // override default Leaflet icon
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: retina,
+            iconUrl: normal,
+            shadowUrl: shadow,
+        });
+
+        console.log("✅ L.Icon.Default sudah di-override:", L.Icon.Default.prototype.options);
     });
 </script>
 
 {{-- Leaflet Control Geocoder JS --}}
 <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 @endpush
+

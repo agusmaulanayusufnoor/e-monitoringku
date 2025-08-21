@@ -2,6 +2,7 @@
     x-data="{
         map: null,
         marker: null,
+        customIcon: null,
 
         init() {
             this.$nextTick(() => {
@@ -16,6 +17,17 @@
                     this.$refs.mapElement._leaflet_id = null;
                 }
 
+                // ✅ Buat custom icon dulu
+                this.customIcon = L.icon({
+                    iconUrl: `${window.location.origin}/images/marker-icon.png`,
+                    iconRetinaUrl: `${window.location.origin}/images/marker-icon-2x.png`,
+                    shadowUrl: `${window.location.origin}/images/marker-shadow.png`,
+                    iconSize: [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41],
+                });
+
                 this.map = L.map(this.$refs.mapElement).setView([lat, lng], 15);
                 window.LeafletPreviewInstance = this.map;
 
@@ -23,7 +35,9 @@
                     maxZoom: 19,
                 }).addTo(this.map);
 
-                this.marker = L.marker([lat, lng]).addTo(this.map);
+                this.marker = L.marker([lat, lng], {
+                    icon: this.customIcon
+                }).addTo(this.map);
 
                 setTimeout(() => {
                     this.map.invalidateSize();
@@ -45,13 +59,6 @@
 ></script>
 
 <script>
-    // ✅ Fix default marker path
-    L.Icon.Default.mergeOptions({
-        iconRetinaUrl: '/images/marker-icon-2x.png',
-        iconUrl: '/images/marker-icon.png',
-        shadowUrl: '/images/marker-shadow.png',
-    });
-
     // ✅ Re-render jika dipanggil dari modal Filament
     document.addEventListener('filament-modal-opened', () => {
         setTimeout(() => {

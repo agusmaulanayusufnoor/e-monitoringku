@@ -20,11 +20,12 @@
                 maxZoom: 19,
             }).addTo(this.map);
 
-            // Geocoder (search)
+            // Geocoder (pakai Photon)
             if (L.Control.geocoder) {
                 this.geocoder = L.Control.geocoder({
                     defaultMarkGeocode: false,
                     placeholder: 'Cari alamat...',
+                    geocoder: new L.Control.Geocoder.Photon() // ✅ gunakan Photon
                 })
                 .on('markgeocode', (e) => {
                     let latlng = e.geocode.center;
@@ -112,6 +113,11 @@
     <p class="text-sm text-gray-600">Cari alamat atau klik di peta untuk memilih lokasi.</p>
 </div>
 
+@push('styles')
+    {{-- Leaflet Control Geocoder CSS --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+@endpush
+
 @push('scripts')
 <script>
     // ✅ Custom marker (gunakan asset lokal)
@@ -121,4 +127,7 @@
         shadowUrl: '/images/marker-shadow.png',
     });
 </script>
+
+{{-- Leaflet Control Geocoder JS --}}
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 @endpush

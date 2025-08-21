@@ -77,7 +77,29 @@ class KunjungannasabahResource extends Resource
                             ->validationMessages([
                                 'min' => 'no rekening tidak boleh kurang dari 12 digit',
                                 'max' => 'no rekening tidak boleh lebih dari 14 digit',
-                            ]),
+                            ])
+                            ->extraInputAttributes(['autocomplete' => 'off'])
+                            ->extraInputAttributes(['inputmode' => 'numeric'])
+                            ->extraInputAttributes(['pattern' => '[0-9]*'])
+                            ->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
+                            ->extraInputAttributes(['onkeydown' => 'if(event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190) return false;'])
+                            ->extraInputAttributes(['onpaste' => 'return false'])
+                            ->extraInputAttributes(['oncopy' => 'return false'])
+                            ->extraInputAttributes(['oncut' => 'return false'])
+                            ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
+                            ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
+                            ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
+                            ->extraInputAttributes(['autocomplete' => 'off'])
+                            ->extraInputAttributes(['inputmode' => 'numeric'])
+                            ->extraInputAttributes(['pattern' => '[0-9]*'])
+                            ->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
+                            ->extraInputAttributes(['onkeydown' => 'if(event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190) return false;'])
+                            ->extraInputAttributes(['onpaste' => 'return false'])
+                            ->extraInputAttributes(['oncopy' => 'return false'])
+                            ->extraInputAttributes(['oncut' => 'return false'])
+                            ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
+                            ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
+                            ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")']),
                         TextInput::make('nama_nasabah')->required()
                             ->label('Nama Nasabah'),
                         Select::make('kolektibilitas')->required()
@@ -93,7 +115,29 @@ class KunjungannasabahResource extends Resource
                                 'HB' => 'HB',
                             ])->native(false),
                         TextInput::make('no_tlp_nasabah')->required()
-                            ->label('No. Telepon Nasabah'),
+                            ->label('No. Telepon Nasabah')
+                            ->extraInputAttributes(['autocomplete' => 'off'])
+                            ->extraInputAttributes(['inputmode' => 'numeric'])
+                            ->extraInputAttributes(['pattern' => '[0-9]*'])
+                            ->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
+                            ->extraInputAttributes(['onkeydown' => 'if(event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190) return false;'])
+                            ->extraInputAttributes(['onpaste' => 'return false'])
+                            ->extraInputAttributes(['oncopy' => 'return false'])
+                            ->extraInputAttributes(['oncut' => 'return false'])
+                            ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
+                            ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
+                            ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
+                            ->extraInputAttributes(['autocomplete' => 'off'])
+                            ->extraInputAttributes(['inputmode' => 'numeric'])
+                            ->extraInputAttributes(['pattern' => '[0-9]*'])
+                            ->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
+                            ->extraInputAttributes(['onkeydown' => 'if(event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190) return false;'])
+                            ->extraInputAttributes(['onpaste' => 'return false'])
+                            ->extraInputAttributes(['oncopy' => 'return false'])
+                            ->extraInputAttributes(['oncut' => 'return false'])
+                            ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
+                            ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
+                            ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")']),
 
                         TextInput::make('lokasi')
                             ->label('Koordinat Lokasi')
@@ -147,7 +191,7 @@ class KunjungannasabahResource extends Resource
                         TextInput::make('jml_setor')->required()
                             ->label('Jumlah Setoran')
                             ->numeric()
-                            ->rules(['required', 'min:0'])
+                            ->rules(['required', 'min:0', 'max:9223372036854775807'])
                             ->placeholder('Masukkan hanya angka')
                             ->helperText('Jumlah setoran dalam IDR')
                             ->columnSpanFull()

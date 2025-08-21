@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.1",
         "althinect/filament-spatie-roles-permissions": "^2.2.38",
-        "filament/filament": "3.3.20",
+        "filament/filament": "3.3.37",
         "guzzlehttp/guzzle": "^7.2",
         "hammerstone/fast-paginate": "^1.1",
         "laravel/framework": "^10.48.25",

@@ -133,9 +133,9 @@
             return;
         }
 
-        let retina = "{{ asset('images/marker-icon-2x.png') }}";
-        let normal = "{{ asset('images/marker-icon.png') }}";
-        let shadow = "{{ asset('images/marker-shadow.png') }}";
+        let retina = '/images/marker-icon-2x.png';
+        let normal = '/images/marker-icon.png';
+        let shadow = '/images/marker-shadow.png';
 
         console.log("👉 iconRetinaUrl:", retina);
         console.log("👉 iconUrl:", normal);

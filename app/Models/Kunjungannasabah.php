@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Kunjungannasabah extends Model
 {
 
-    protected $table='kunjungannasabah';
+    protected $table = 'kunjungannasabah';
     protected $primaryKey = "id";
     protected $fillable = [
         'tgl_kunjungan',
@@ -35,22 +35,22 @@ class Kunjungannasabah extends Model
     {
         return $this->belongsTo(User::class);
     }
-     // Event listener untuk menghapus file gambar ketika record dihapus
-     protected static function booted()
-     {
-         static::deleting(function ($kunjungannasabah) {
-             if ($kunjungannasabah->poto) {
-                 // Verifikasi nama file yang akan dihapus
-                 \Log::info('Menghapus file gambar: ' . $kunjungannasabah->poto);
-     
-                 $filePath = $kunjungannasabah->poto;
-                 if (Storage::disk('public')->exists($filePath)) {
-                     Storage::disk('public')->delete($filePath);
-                     \Log::info('File gambar berhasil dihapus: ' . $filePath);
-                 } else {
-                     \Log::warning('File gambar tidak ditemukan: ' . $filePath);
-                 }
-             }
-         });
-     }
+    // Event listener untuk menghapus file gambar ketika record dihapus
+    protected static function booted()
+    {
+        static::deleting(function ($kunjungannasabah) {
+            if ($kunjungannasabah->poto) {
+                // Verifikasi nama file yang akan dihapus
+                \Log::info('Menghapus file gambar: ' . $kunjungannasabah->poto);
+
+                $filePath = $kunjungannasabah->poto;
+                if (Storage::disk('public')->exists($filePath)) {
+                    Storage::disk('public')->delete($filePath);
+                    \Log::info('File gambar berhasil dihapus: ' . $filePath);
+                } else {
+                    \Log::warning('File gambar tidak ditemukan: ' . $filePath);
+                }
+            }
+        });
+    }
 }

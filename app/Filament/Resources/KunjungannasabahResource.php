@@ -88,17 +88,6 @@ class KunjungannasabahResource extends Resource
                             ->extraInputAttributes(['oncut' => 'return false'])
                             ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
                             ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
-                            ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
-                            ->extraInputAttributes(['autocomplete' => 'off'])
-                            ->extraInputAttributes(['inputmode' => 'numeric'])
-                            ->extraInputAttributes(['pattern' => '[0-9]*'])
-                            ->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
-                            ->extraInputAttributes(['onkeydown' => 'if(event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190) return false;'])
-                            ->extraInputAttributes(['onpaste' => 'return false'])
-                            ->extraInputAttributes(['oncopy' => 'return false'])
-                            ->extraInputAttributes(['oncut' => 'return false'])
-                            ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
-                            ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
                             ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")']),
                         TextInput::make('nama_nasabah')->required()
                             ->label('Nama Nasabah'),
@@ -126,19 +115,8 @@ class KunjungannasabahResource extends Resource
                             ->extraInputAttributes(['oncut' => 'return false'])
                             ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
                             ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
-                            ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
-                            ->extraInputAttributes(['autocomplete' => 'off'])
-                            ->extraInputAttributes(['inputmode' => 'numeric'])
-                            ->extraInputAttributes(['pattern' => '[0-9]*'])
-                            ->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
-                            ->extraInputAttributes(['onkeydown' => 'if(event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190) return false;'])
-                            ->extraInputAttributes(['onpaste' => 'return false'])
-                            ->extraInputAttributes(['oncopy' => 'return false'])
-                            ->extraInputAttributes(['oncut' => 'return false'])
-                            ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
-                            ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
                             ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")']),
-
+                            
                         TextInput::make('lokasi')
                             ->label('Koordinat Lokasi')
                             ->required()
@@ -157,9 +135,19 @@ class KunjungannasabahResource extends Resource
                                             ->label('Klik di peta untuk memilih lokasi')
                                             ->required(),
                                     ])
-                                    ->action(function (array $data, $set) {
+                                   ->action(function (array $data, $set) {
+                                    // Debugging: Dump the value to see what's being passed
+                                    // dd($data['selectedLocation']);
+                                    
+                                    // Check if the value is a string before using it
+                                    if (is_string($data['selectedLocation'])) {
                                         $set('lokasi', $data['selectedLocation']);
-                                    })
+                                    } else {
+                                        // You can add a notification or log a warning here
+                                        // For example:
+                                        $this->notify('error', 'Pilihan lokasi tidak valid.');
+                                    }
+                                })
                             ),
                         View::make('components.location-preview-map')
                             ->label('Lokasi di Peta')
@@ -195,17 +183,6 @@ class KunjungannasabahResource extends Resource
                             ->placeholder('Masukkan hanya angka')
                             ->helperText('Jumlah setoran dalam IDR')
                             ->columnSpanFull()
-                            ->extraInputAttributes(['autocomplete' => 'off'])
-                            ->extraInputAttributes(['inputmode' => 'numeric'])
-                            ->extraInputAttributes(['pattern' => '[0-9]*'])
-                            ->extraInputAttributes(['oninput' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
-                            ->extraInputAttributes(['onkeydown' => 'if(event.keyCode == 69 || event.keyCode == 189 || event.keyCode == 190) return false;'])
-                            ->extraInputAttributes(['onpaste' => 'return false'])
-                            ->extraInputAttributes(['oncopy' => 'return false'])
-                            ->extraInputAttributes(['oncut' => 'return false'])
-                            ->extraInputAttributes(['onblur' => 'if(this.value == "") this.value = "0";'])
-                            ->extraInputAttributes(['onfocus' => 'if(this.value == "0") this.value = "";'])
-                            ->extraInputAttributes(['onkeyup' => 'this.value = this.value.replace(/[^0-9]/g, "")'])
                             ->extraInputAttributes(['autocomplete' => 'off'])
                             ->extraInputAttributes(['inputmode' => 'numeric'])
                             ->extraInputAttributes(['pattern' => '[0-9]*'])

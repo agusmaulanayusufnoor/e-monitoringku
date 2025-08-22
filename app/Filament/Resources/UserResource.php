@@ -100,7 +100,9 @@ class UserResource extends Resource
                 TextColumn::make('username')->label('Username')->sortable()->searchable(),
                 TextColumn::make('email')->label('Email')->sortable()->searchable(),
                 TextColumn::make('kantor.nama_kantor')->label('Kantor')->sortable()->searchable(),
-                TextColumn::make('roles.name')->label('Roles')->sortable()->searchable()
+                TextColumn::make('roles.name')->label('Roles')
+                ->searchable()
+                ->listWithLineBreaks(),
             ])
             ->filters([
                 SelectFilter::make('kantor_id')

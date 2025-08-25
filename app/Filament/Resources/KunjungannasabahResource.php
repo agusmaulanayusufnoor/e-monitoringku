@@ -131,7 +131,8 @@ class KunjungannasabahResource extends Resource
                                 'regex' => 'Format lokasi tidak valid. Harus dalam format "latitude,longitude" (misal: -6.200000,106.816666).',
                             ])
                             ->placeholder('klik icon peta')
-                            ->disabled()
+                            ->helperText('Harus diisi dengan format "latitude,longitude" (misal: -6.200000,106.816666).')
+                            ->readonly()
                             ->suffixAction(
                                 Action::make('openMap')
                                     ->label('Pilih di Peta')

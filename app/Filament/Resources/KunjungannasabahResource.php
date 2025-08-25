@@ -124,6 +124,7 @@ class KunjungannasabahResource extends Resource
                                 'required',
                                 'regex:/^-?\d+\.\d+,-?\d+\.\d+$/'
                             ])
+                            ->disabled()
                             ->suffixAction(
                                 Action::make('openMap')
                                     ->label('Pilih di Peta')
@@ -140,12 +141,16 @@ class KunjungannasabahResource extends Resource
                                     // dd($data['selectedLocation']);
                                     
                                     // Check if the value is a string before using it
-                                    if (is_string($data['selectedLocation'])) {
+                                    if (isset($data['selectedLocation']) && is_string($data['selectedLocation'])) {
                                         $set('lokasi', $data['selectedLocation']);
                                     } else {
                                         // You can add a notification or log a warning here
                                         // For example:
-                                        $this->notify('error', 'Pilihan lokasi tidak valid.');
+                                        \Filament\Notifications\Notification::make()
+                                            ->title('Error')
+                                            ->body('Lokasi yang dipilih tidak valid. Silakan coba lagi.')
+                                            ->danger()
+                                            ->send();
                                     }
                                 })
                             ),
@@ -153,8 +158,7 @@ class KunjungannasabahResource extends Resource
                             ->label('Lokasi di Peta')
                             ->visible(fn($get) => filled($get('lokasi')))
                             ->viewData(fn($get) => [
-                                'location' => $get('lokasi'),
-                            ])
+                                'location' => $get('lokasi'),])
                             ->columnSpanFull(),
                         Textarea::make('hasil')
                             ->required()

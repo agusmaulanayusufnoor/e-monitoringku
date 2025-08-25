@@ -73,6 +73,7 @@ class KunjungannasabahResource extends Resource
                         TextInput::make('no_rekening')->required()
                             ->label('No. Rekening')
                             ->autocapitalize()
+                            ->placeholder('No. Rekening harus angka')
                             ->rules(['required', 'min:12', 'max:14'])
                             ->validationMessages([
                                 'min' => 'no rekening tidak boleh kurang dari 12 digit',
@@ -105,6 +106,7 @@ class KunjungannasabahResource extends Resource
                             ])->native(false),
                         TextInput::make('no_tlp_nasabah')->required()
                             ->label('No. Telepon Nasabah')
+                            ->placeholder('No. Telepon harus angka')
                             ->extraInputAttributes(['autocomplete' => 'off'])
                             ->extraInputAttributes(['inputmode' => 'numeric'])
                             ->extraInputAttributes(['pattern' => '[0-9]*'])
@@ -124,6 +126,11 @@ class KunjungannasabahResource extends Resource
                                 'required',
                                 'regex:/^-?\d+\.\d+,-?\d+\.\d+$/'
                             ])
+                            ->validationMessages([
+                                'required' => 'Lokasi belum dipilih',
+                                'regex' => 'Format lokasi tidak valid. Harus dalam format "latitude,longitude" (misal: -6.200000,106.816666).',
+                            ])
+                            ->placeholder('klik icon peta')
                             ->disabled()
                             ->suffixAction(
                                 Action::make('openMap')
@@ -185,7 +192,7 @@ class KunjungannasabahResource extends Resource
                             ->numeric()
                             ->rules(['required', 'min:0', 'max:9223372036854775807'])
                             ->placeholder('Masukkan hanya angka')
-                            ->helperText('Jumlah setoran dalam IDR')
+                            ->helperText('Jumlah setoran harus angka tanpa titik koma')
                             ->columnSpanFull()
                             ->extraInputAttributes(['autocomplete' => 'off'])
                             ->extraInputAttributes(['inputmode' => 'numeric'])
